@@ -1,0 +1,639 @@
+HƯỚNG DẪN GIT VÀ NETBEANS GUI CHO NHÓM
+Repository: Group-5-pro192/Enum-generic
+URL: https://github.com/Group-5-pro192/Enum-generic
+Nhánh chính: main
+
+============================================================
+1. MỤC ĐÍCH VÀ QUY TẮC CHUNG
+============================================================
+
+Tài liệu này hướng dẫn sử dụng repository bằng:
+- Git Bash.
+- NetBeans GUI.
+
+Quy trình khuyến nghị:
+1. Không code trực tiếp trên main.
+2. Mỗi chức năng tạo một branch riêng.
+3. Pull/fetch main trước khi bắt đầu làm việc.
+4. Commit nhỏ, rõ ràng, có nội dung mô tả.
+5. Push branch cá nhân, sau đó tạo Pull Request.
+6. Ít nhất một thành viên khác review trước khi merge vào main.
+7. Luôn chạy chương trình và kiểm tra lỗi trước khi commit/push.
+
+Không commit các file build, file cấu hình riêng, mật khẩu, token hoặc API key.
+
+============================================================
+2. CHUẨN BỊ MÁY
+============================================================
+
+Cài đặt:
+- JDK cùng phiên bản cho toàn nhóm, ví dụ JDK 17 hoặc JDK 21.
+- NetBeans.
+- Git: https://git-scm.com/downloads
+- Tài khoản GitHub đã được cấp quyền vào repository.
+
+Kiểm tra bằng Git Bash:
+
+    git --version
+    java -version
+    javac -version
+
+Cấu hình danh tính Git một lần trên mỗi máy:
+
+    git config --global user.name "Tên của bạn"
+    git config --global user.email "email-github-cua-ban@example.com"
+
+Kiểm tra cấu hình:
+
+    git config --global --list
+
+Lưu ý: email nên là email đã thêm vào GitHub hoặc email noreply của GitHub.
+
+============================================================
+3. CLONE REPOSITORY
+============================================================
+
+3.1. Clone bằng Git Bash
+
+Mở Git Bash tại thư mục muốn lưu project:
+
+    git clone https://github.com/Group-5-pro192/Enum-generic.git
+    cd Enum-generic
+    git remote -v
+    git branch -a
+
+Kết quả remote phải trỏ tới:
+
+    https://github.com/Group-5-pro192/Enum-generic.git
+
+3.2. Clone bằng NetBeans GUI
+
+1. Mở NetBeans.
+2. Chọn Team > Git > Clone.
+3. Tại Repository URL nhập:
+
+    https://github.com/Group-5-pro192/Enum-generic.git
+
+4. Nhập thông tin xác thực nếu NetBeans yêu cầu.
+5. Chọn thư mục cha để lưu project.
+6. Chọn branch main nếu có bước chọn branch.
+7. Nhấn Next rồi Finish.
+8. Chọn Open Project nếu NetBeans phát hiện project.
+
+Nếu không thấy Team > Git > Clone:
+- Kiểm tra Git đã được cài đặt.
+- Vào Tools > Options > Team > Git để kiểm tra đường dẫn Git.
+- Có thể clone bằng Git Bash rồi dùng File > Open Project.
+
+3.3. Mở project đã clone trong NetBeans
+
+1. Chọn File > Open Project.
+2. Chọn thư mục Enum-generic.
+3. Chọn Open Project.
+4. Nếu là Maven, chọn thư mục có pom.xml.
+5. Nếu là Ant, chọn thư mục có nbproject và src.
+6. Đợi NetBeans tải dependency/index trước khi chạy.
+
+============================================================
+4. TẠO BRANCH
+============================================================
+
+Branch là nhánh làm việc riêng, giúp không ảnh hưởng trực tiếp đến main.
+
+4.1. Tạo branch bằng Git Bash
+
+Cập nhật main trước:
+
+    git switch main
+    git pull --rebase origin main
+
+Tạo branch mới:
+
+    git switch -c feature/login
+
+Kiểm tra branch hiện tại:
+
+    git branch
+    git status
+
+Ví dụ tên branch:
+
+    feature/login
+    feature/product-management
+    feature/order-service
+    fix/null-pointer
+    fix/validate-input
+    docs/setup-guide
+
+4.2. Tạo branch bằng NetBeans GUI
+
+Cách 1 - Từ menu:
+1. Chọn Team > Branch/Tag > Create Branch.
+2. Nhập Branch Name, ví dụ feature/login.
+3. Chọn branch nguồn là main hoặc commit hiện tại.
+4. Nhấn Create.
+5. Nếu có tùy chọn Checkout Created Branch, chọn tùy chọn này.
+
+Cách 2 - Từ cửa sổ Git:
+1. Chọn Window > IDE Tools > Git hoặc Team > Branch/Tag.
+2. Mở danh sách branch.
+3. Nhấn chuột phải vào main.
+4. Chọn Create Branch.
+5. Đặt tên branch và xác nhận checkout.
+
+Sau khi tạo branch, thanh trạng thái hoặc cửa sổ Git phải hiển thị branch mới.
+
+4.3. Chuyển branch
+
+Git Bash:
+
+    git switch feature/login
+
+Git cũ:
+
+    git checkout feature/login
+
+NetBeans GUI:
+1. Chọn Team > Branch/Tag > Checkout Branch.
+2. Chọn branch cần chuyển.
+3. Nhấn Checkout.
+
+Không chuyển branch khi đang có thay đổi chưa commit nếu chưa hiểu rõ tác động.
+
+============================================================
+5. FETCH - TẢI THÔNG TIN MỚI NHƯNG CHƯA TRỘN CODE
+============================================================
+
+Fetch chỉ tải thông tin branch/commit mới từ GitHub về máy. Fetch không tự động thay đổi file đang mở.
+
+5.1. Fetch bằng Git Bash
+
+    git fetch origin
+
+Xem branch từ xa:
+
+    git branch -r
+
+Xem tất cả branch local và remote:
+
+    git branch -a
+
+Xem commit có trên remote nhưng chưa có local:
+
+    git log --oneline main..origin/main
+
+5.2. Fetch bằng NetBeans GUI
+
+1. Chọn Team > Remote > Fetch.
+2. Chọn remote origin nếu NetBeans hỏi.
+3. Nhấn Fetch.
+4. Mở cửa sổ Git để xem các branch remote như origin/main.
+
+Một số phiên bản NetBeans có thể đặt mục này tại:
+- Team > Remote > Fetch from Upstream.
+- Chuột phải project > Git > Remote > Fetch.
+
+Sau fetch, code local chưa tự thay đổi. Muốn cập nhật code phải merge hoặc rebase.
+
+============================================================
+6. PULL - LẤY VÀ ÁP DỤNG CODE MỚI
+============================================================
+
+Pull thường gồm fetch và merge/rebase. Luôn kiểm tra code đang làm trước khi pull.
+
+6.1. Pull bằng Git Bash
+
+Cập nhật main:
+
+    git switch main
+    git pull --rebase origin main
+
+Cập nhật branch hiện tại theo remote tương ứng:
+
+    git pull --rebase origin feature/login
+
+Nếu nhóm dùng merge thay vì rebase:
+
+    git pull origin main
+
+Khuyến nghị nhóm thống nhất dùng pull --rebase để lịch sử gọn hơn.
+
+6.2. Pull bằng NetBeans GUI
+
+1. Checkout branch muốn cập nhật, thường là main.
+2. Chọn Team > Remote > Pull.
+3. Chọn remote origin.
+4. Chọn branch cần lấy, thường là main.
+5. Chọn cách cập nhật nếu NetBeans hỏi:
+   - Rebase: đưa commit local lên sau code mới.
+   - Merge: tạo merge commit.
+6. Nhấn Pull.
+7. Đợi NetBeans hoàn tất rồi xem cửa sổ Output/Git.
+
+Một số phiên bản có nút Pull trong cửa sổ Git hoặc menu chuột phải project.
+
+6.3. Khi có thay đổi chưa commit
+
+Kiểm tra:
+
+    git status
+
+Có thể commit trước:
+
+    git add .
+    git commit -m "Save current work"
+    git pull --rebase origin main
+
+Hoặc dùng stash:
+
+    git stash
+    git pull --rebase origin main
+    git stash pop
+
+NetBeans GUI:
+1. Vào Team > Stash Changes.
+2. Đặt message cho stash.
+3. Pull code mới.
+4. Vào Team > Apply Stash để áp dụng lại thay đổi.
+
+============================================================
+7. XEM THAY ĐỔI VÀ COMMIT
+============================================================
+
+7.1. Xem thay đổi bằng Git Bash
+
+    git status
+    git diff
+    git diff --staged
+
+7.2. Xem thay đổi bằng NetBeans GUI
+
+1. Mở cửa sổ Projects hoặc Files.
+2. File đã sửa thường có dấu hiệu màu/biểu tượng thay đổi.
+3. Chuột phải file hoặc project.
+4. Chọn Git > Diff.
+5. Xem phần bên trái là phiên bản cũ, bên phải là phiên bản mới.
+
+Trước khi commit, kiểm tra kỹ:
+- Có file nào không phải do mình tạo không.
+- Có file build hoặc file cá nhân không.
+- Có xóa nhầm code người khác không.
+- Thay đổi có đúng yêu cầu không.
+
+7.3. Commit bằng Git Bash
+
+Thêm toàn bộ file:
+
+    git add .
+
+Hoặc thêm từng file:
+
+    git add src/example/LoginService.java
+
+Commit:
+
+    git commit -m "Implement login validation"
+
+Xem commit gần đây:
+
+    git log --oneline -5
+
+7.4. Commit bằng NetBeans GUI
+
+1. Chọn Team > Commit.
+2. Cửa sổ Commit sẽ liệt kê các file thay đổi.
+3. Bỏ chọn file không muốn commit.
+4. Kiểm tra diff bằng nút Diff nếu cần.
+5. Nhập Commit Message, ví dụ:
+
+    Implement login validation
+
+6. Nhấn Commit.
+7. Có thể chọn Commit and Push nếu chắc chắn muốn đẩy ngay lên GitHub.
+
+Khuyến nghị dùng Commit trước, kiểm tra lại, sau đó Push riêng.
+
+============================================================
+8. PUSH CODE LÊN GITHUB
+============================================================
+
+8.1. Push bằng Git Bash
+
+Push branch lần đầu:
+
+    git push -u origin feature/login
+
+Các lần sau:
+
+    git push
+
+Kiểm tra branch đang đứng trước khi push:
+
+    git branch --show-current
+
+Không push trực tiếp vào main trừ khi nhóm đã thống nhất và có kiểm tra.
+
+8.2. Push bằng NetBeans GUI
+
+1. Đảm bảo đang checkout branch cá nhân.
+2. Chọn Team > Remote > Push.
+3. Chọn remote origin.
+4. Chọn branch local cần push, ví dụ feature/login.
+5. Nếu là lần đầu, chọn thiết lập upstream branch nếu được hỏi.
+6. Nhấn Push.
+7. Đợi thông báo Push completed.
+
+Có thể dùng Team > Commit để commit trước, sau đó Team > Remote > Push.
+
+8.3. Tạo Pull Request sau khi push
+
+1. Mở https://github.com/Group-5-pro192/Enum-generic.
+2. Chọn Compare & pull request nếu GitHub hiển thị.
+3. Chọn base branch là main.
+4. Chọn compare branch là branch cá nhân.
+5. Viết tiêu đề và mô tả thay đổi.
+6. Gán reviewer cho một thành viên khác.
+7. Chờ review, sửa nếu cần rồi push tiếp vào cùng branch.
+8. Chỉ merge khi đã kiểm tra và được nhóm đồng ý.
+
+============================================================
+9. MERGE MAIN VÀO BRANCH ĐANG LÀM
+============================================================
+
+9.1. Dùng rebase bằng Git Bash
+
+    git fetch origin
+    git switch main
+    git pull --rebase origin main
+    git switch feature/login
+    git rebase main
+
+Nếu branch đã được push và rebase làm thay đổi lịch sử:
+
+    git push --force-with-lease
+
+Chỉ dùng force-with-lease trên branch cá nhân, không dùng trên main.
+
+9.2. Dùng merge bằng Git Bash
+
+    git fetch origin
+    git switch feature/login
+    git merge origin/main
+
+9.3. Dùng NetBeans GUI
+
+Cách cập nhật main trước:
+1. Team > Branch/Tag > Checkout Branch > main.
+2. Team > Remote > Pull.
+3. Chuyển lại branch cá nhân.
+
+Cách merge main vào branch cá nhân:
+1. Checkout branch cá nhân.
+2. Chọn Team > Branch/Tag > Merge Revision.
+3. Chọn main hoặc origin/main.
+4. Xác nhận Merge.
+5. Kiểm tra conflict nếu có.
+
+Tên menu có thể hơi khác tùy phiên bản NetBeans, nhưng thường nằm trong Team > Branch/Tag.
+
+============================================================
+10. XỬ LÝ CONFLICT
+============================================================
+
+Kiểm tra conflict bằng Git Bash:
+
+    git status
+
+File conflict có các dấu:
+
+    <<<<<<< HEAD
+    Code hiện tại
+    =======
+    Code từ branch khác
+    >>>>>>> origin/main
+
+Cách xử lý:
+1. Mở file conflict trong NetBeans.
+2. Chọn phần code đúng hoặc kết hợp hai phần nếu cần.
+3. Xóa toàn bộ dấu <<<<<<<, =======, >>>>>>>.
+4. Lưu file.
+5. Chạy chương trình và test.
+6. Đánh dấu đã xử lý.
+
+Git Bash:
+
+    git add ten-file.java
+
+Nếu đang merge:
+
+    git commit
+
+Nếu đang rebase:
+
+    git rebase --continue
+
+Trong NetBeans:
+1. Chọn Team > Resolve Conflicts.
+2. Mở công cụ 3-way Merge.
+3. So sánh Local, Remote và Result.
+4. Chọn phần cần giữ.
+5. Lưu Result.
+6. Chọn Mark Resolved.
+7. Commit hoặc tiếp tục rebase.
+
+Hủy thao tác khi xử lý sai:
+
+    git merge --abort
+    git rebase --abort
+
+Không tự ý chọn Accept All nếu chưa đọc từng phần conflict.
+
+============================================================
+11. XÓA, ĐỔI TÊN VÀ KHÔI PHỤC FILE
+============================================================
+
+Git Bash:
+
+    git mv OldName.java NewName.java
+    git rm FileKhongCan.java
+    git restore FileBiSua.java
+
+NetBeans GUI:
+- Đổi tên file bằng Refactor > Rename để NetBeans cập nhật reference.
+- Xóa file bằng chuột phải > Delete, sau đó kiểm tra cửa sổ Git.
+- Dùng Git > Revert/Discard Changes để hủy thay đổi, nhưng phải cẩn thận vì dữ liệu có thể mất.
+
+============================================================
+12. QUY TẮC CODE VÀ CẤU TRÚC PROJECT
+============================================================
+
+Tên package viết thường:
+
+    com.group5.enumgeneric.service
+
+Tên class dùng PascalCase:
+
+    ProductService
+    UserController
+
+Tên method và biến dùng camelCase:
+
+    calculateTotal()
+    productName
+
+Hằng số dùng chữ in hoa:
+
+    private static final int MAX_RETRY = 3;
+
+Mỗi class nên có một trách nhiệm chính. Tách các lớp theo nhóm phù hợp, ví dụ:
+
+    model/
+    service/
+    repository/
+    controller/
+    util/
+
+Không hard-code mật khẩu, token hoặc đường dẫn riêng của máy.
+Không nuốt exception bằng catch rỗng.
+Không commit file build, target, dist hoặc nbproject/private.
+Không sửa/xóa code của người khác nếu chưa trao đổi.
+Mỗi chức năng nên có kiểm thử hoặc ít nhất kiểm tra thủ công rõ ràng.
+
+============================================================
+13. GITIGNORE ĐỀ XUẤT CHO JAVA/NETBEANS
+============================================================
+
+Tạo file .gitignore ở thư mục gốc:
+
+    *.class
+    build/
+    dist/
+    target/
+    out/
+    /nbproject/private/
+    /nbbuild/
+    /nbdist/
+    /.nb-gradle/
+    .idea/
+    .vscode/
+    *.iml
+    .DS_Store
+    Thumbs.db
+    *.log
+    .env
+    application-local.properties
+
+Nên commit nbproject nếu project Ant cần nó để mở bằng NetBeans, nhưng không commit nbproject/private.
+
+============================================================
+14. QUY TRÌNH HẰNG NGÀY ĐỀ XUẤT
+============================================================
+
+Bắt đầu ngày làm việc:
+
+    git switch main
+    git pull --rebase origin main
+    git switch feature/ten-chuc-nang
+    git rebase main
+
+Trong lúc code:
+
+    git status
+    git diff
+
+Sau khi hoàn thành một phần nhỏ:
+
+    git add .
+    git commit -m "Describe one specific change"
+    git push
+
+Trước khi tạo Pull Request:
+
+    git fetch origin
+    git rebase origin/main
+    git push --force-with-lease
+
+Sau đó chạy lại project, kiểm tra chức năng và tạo Pull Request.
+
+============================================================
+15. BẢNG LỆNH VÀ NETBEANS GUI TƯƠNG ỨNG
+============================================================
+
+Mục đích                 Git Bash                         NetBeans GUI
+--------------------------------------------------------------------------
+Clone                    git clone URL                     Team > Git > Clone
+Xem trạng thái           git status                        Team > Status
+Tạo branch               git switch -c ten-branch          Team > Branch/Tag > Create Branch
+Chuyển branch            git switch ten-branch             Team > Branch/Tag > Checkout Branch
+Fetch                    git fetch origin                   Team > Remote > Fetch
+Pull                     git pull --rebase origin main      Team > Remote > Pull
+Xem diff                 git diff                           Git > Diff
+Thêm file                git add file                       Cửa sổ Commit, chọn file
+Commit                   git commit -m "message"             Team > Commit
+Push                     git push                           Team > Remote > Push
+Merge                    git merge origin/main               Team > Branch/Tag > Merge Revision
+Rebase                   git rebase main                     Team > Branch/Tag > Rebase
+Xem log                  git log --oneline                   Team > History
+Stash                    git stash                           Team > Stash Changes
+
+Tên menu có thể thay đổi nhẹ giữa các phiên bản NetBeans. Nếu không thấy mục cần tìm,
+kiểm tra menu Team, cửa sổ Git, menu chuột phải project hoặc cài đặt Git trong Tools > Options.
+
+============================================================
+16. CÁC LỖI THƯỜNG GẶP
+============================================================
+
+Lỗi: rejected/non-fast-forward
+Nguyên nhân: remote có commit mới.
+Cách xử lý:
+
+    git pull --rebase origin ten-branch
+    git push
+
+Lỗi: branch chưa có upstream
+Cách xử lý:
+
+    git push -u origin ten-branch
+
+Lỗi: authentication failed
+Cách xử lý:
+- Kiểm tra URL remote.
+- Đăng nhập đúng GitHub.
+- Với HTTPS, dùng credential/token theo yêu cầu GitHub, không dùng mật khẩu GitHub cũ.
+- Kiểm tra quyền truy cập repository.
+
+Lỗi: project không chạy trong NetBeans
+Kiểm tra:
+- Đúng JDK chưa.
+- Đã chọn đúng project root chưa.
+- Maven/Gradle đã tải dependency chưa.
+- Có lỗi compile trong cửa sổ Output không.
+- Các thành viên có dùng cùng JDK không.
+
+Lỗi: commit nhầm file
+Nếu chưa push:
+
+    git restore --staged ten-file
+
+Nếu file đã commit nhưng chưa push:
+
+    git reset --soft HEAD~1
+
+Không dùng reset hoặc force push nếu chưa hiểu rõ và chưa hỏi nhóm.
+
+============================================================
+17. CHECKLIST TRƯỚC KHI PUSH
+============================================================
+
+[ ] Đang đứng trên branch cá nhân, không phải main.
+[ ] Đã pull/rebase code mới nhất.
+[ ] Đã xem git status.
+[ ] Đã xem diff từng file quan trọng.
+[ ] Không có mật khẩu, token hoặc file cá nhân.
+[ ] Không có build/, dist/, target/ hoặc nbproject/private/.
+[ ] Project compile và chạy được.
+[ ] Commit message mô tả đúng thay đổi.
+[ ] Đã push đúng branch.
+[ ] Đã thông báo cho reviewer nếu cần.
+
+Kết thúc tài liệu.
